@@ -1,0 +1,70 @@
+
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class CinemaTicketCounter {
+    public static void main(String[] args) {
+        Cinema cinema = new Cinema();
+        Scanner input = new Scanner(System.in);
+
+        while (true) {
+            System.out.println("\n1. Display seats");
+            System.out.println("2. Book a seat");
+            System.out.println("3. Cancel a booking");
+            System.out.println("4. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = getInput(input);
+            if (choice == 1) {
+                cinema.displaySeats();
+            } else if (choice == 2) {
+                int row = getRowOrCol(input, "Enter row (1-5): ") - 1;
+                int col = getRowOrCol(input, "Enter column (1-6): ") - 1;
+                if (cinema.bookSeat(row, col)) {
+                    System.out.println("Seat booked successfully!");
+                } else {
+                    System.out.println("Seat already booked.");
+                }
+            } else if (choice == 3) {
+                int row = getRowOrCol(input, "Enter row (1-5): ") - 1;
+                int col = getRowOrCol(input, "Enter column (1-6): ") - 1;
+                if (cinema.cancelSeat(row, col)) {
+                    System.out.println("Booking canceled successfully!");
+                } else {
+                    System.out.println("Seat is not booked.");
+                }
+            } else if (choice == 4) {
+                System.out.println("Exiting...");
+                break;
+            } else {
+                System.out.println("Invalid choice, please try again.");
+            }
+        }
+        input.close();
+    }
+
+    private static int getInput(Scanner input) {
+        while (true) {
+            try {
+                return input.nextInt();
+            } catch (InputMismatchException e) {
+                System.out.println("Please enter a valid number.");
+                input.next(); // Clear invalid input
+            }
+        }
+    }
+
+    private static int getRowOrCol(Scanner input, String prompt) {
+        int value;
+        while (true) {
+            System.out.print(prompt);
+            value = getInput(input);
+            if (value >= 1 && value <= 6) {
+                return value;
+            } else {
+                System.out.println("Please enter a valid number (1-5 for row, 1-6 for column).");
+            }
+        }
+    }
+}
